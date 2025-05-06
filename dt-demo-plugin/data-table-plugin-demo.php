@@ -86,7 +86,7 @@ class DemoDataTablePlugin {
 		// ----------------------------------------------
 		$(document).ready( function () {
 			var nonce = '<?php echo wp_create_nonce('wp_rest');?>';
-		    var theTable = new DataTable('#custom-display-table', {
+		    	var theTable = new DataTable('#custom-display-table', {
 			    ajax: {
 			    	url:'<?php echo get_rest_url(null, 'data_table_demo_ep/v1/refresh_table');?>',
 			    	dataSrc: '',
@@ -152,26 +152,26 @@ class DemoDataTablePlugin {
 				event.preventDefault();
 				var form = $(this).serialize();
 				var nonce = '<?php echo wp_create_nonce('wp_rest');?>';
-	    	    const user_id = <?php echo get_current_user_id(); ?>;
-	    	    // Check if the user is logged in
-	    	    if (user_id == 0) {
-	    	    	alert('You most create an account to use the table');
-	    	    } else {
-	    	    	// ----------------------------------------------
-					// If button has desired class, create new row
-					// ----------------------------------------------
-		    	    if (this.classList.contains('initial-input-form')) {
-		    	    	$.ajax({
-							method:'post',
-							url:'<?php echo get_rest_url(null, 'data_table_demo_ep/v1/create_new_row');?>',
-							headers: {'x_wp_nonce': nonce},
-							data: form,
-		    	            success: function(){
-		    	            	theTable.ajax.reload();
-		    	            }
-						});
-		    	    }
-		    	} 
+				const user_id = <?php echo get_current_user_id(); ?>;
+			    	// Check if the user is logged in
+			    	if (user_id == 0) {
+					alert('You most create an account to use the table');
+			    	} else {
+				// ----------------------------------------------
+				// If button has desired class, create new row
+				// ----------------------------------------------
+			    	    if (this.classList.contains('initial-input-form')) {
+			    	    	$.ajax({
+						method:'post',
+						url:'<?php echo get_rest_url(null, 'data_table_demo_ep/v1/create_new_row');?>',
+						headers: {'x_wp_nonce': nonce},
+						data: form,
+				    	        success: function(){
+				    	            theTable.ajax.reload();
+				    	        }
+					});
+		    	    	    }
+		    		} 
 			});
 			// ----------------------------------------------
 			// Event listener for table rows
@@ -194,37 +194,37 @@ class DemoDataTablePlugin {
 						$(unsaved_rows[0]).children('button').prevObject.replaceWith("<button type='submit' class='btn td-btn edit-row'>Edit</button>");
 					} 
 					// Now create the new editable row
-			        var parent = $(this).closest("tr");
-			        parent.addClass('editing');
-			        labels.forEach(function(key) {
-					  var text = $(parent).children(key).html();
-					  $(parent).children(key).html("<input class='edit-row-input' size='1' style='width:100%' name='" + key.slice(1) + "' value='" + text + "'>");
+				        var parent = $(this).closest("tr");
+				        parent.addClass('editing');
+				        labels.forEach(function(key) {
+						var text = $(parent).children(key).html();
+						$(parent).children(key).html("<input class='edit-row-input' size='1' style='width:100%' name='" + key.slice(1) + "' value='" + text + "'>");
 					});
-			        $('.editing button').replaceWith("<button type='submit' class='btn td-btn btn-info-save'>Save</button>");
+			        	$('.editing button').replaceWith("<button type='submit' class='btn td-btn btn-info-save'>Save</button>");
 				}
 				// ----------------------------------------------
 				// Save button functionality for table rows
 				// ----------------------------------------------
 				if(element.target.classList.contains('btn-info-save')) {
 					var nonce = '<?php echo wp_create_nonce('wp_rest');?>';
-		        	var parent = $(this).closest("tr");
-	    	        var id = $(parent).attr("id");
-	    	        var data = {id: id};
-	    	        $("input.edit-row-input").each( function(){
-	    	            var col = $(this).attr("name");
-	    	            var val = $(this).val();
-	    	            data[col] = val;
-	    	        });
-	    	        $.ajax({
-	    	            url: '<?php echo get_rest_url(null, 'data_table_demo_ep/v1/update_table');?>',
-	    	            method: 'post',
-	    	            headers: {'x_wp_nonce': nonce},
-	    	            dataType: 'json',
-	    	            data: data,
-	    	            success: function(){
-	    	            	theTable.ajax.reload();
-	    	            }
-	    	        });
+		        		var parent = $(this).closest("tr");
+	    	        		var id = $(parent).attr("id");
+			    	        var data = {id: id};
+			    	        $("input.edit-row-input").each( function(){
+			    	            var col = $(this).attr("name");
+			    	            var val = $(this).val();
+			    	            data[col] = val;
+			    	        });
+			    	        $.ajax({
+			    	            url: '<?php echo get_rest_url(null, 'data_table_demo_ep/v1/update_table');?>',
+			    	            method: 'post',
+			    	            headers: {'x_wp_nonce': nonce},
+			    	            dataType: 'json',
+			    	            data: data,
+			    	            success: function(){
+			    	            	theTable.ajax.reload();
+			    	            }
+			    	        });
 				}
 			});
 		});
